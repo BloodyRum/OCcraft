@@ -9,9 +9,9 @@ recipies = assert(ser.unserialize(f:read("*a")))
 f:close()
 
 function convertSlot(slot)
-  if slot == 4 or slot == 5 or slot == 6 then
+  if slot > 3 and slot < 7 then
     slot = slot + 1
-  elseif slot == 7 or slot == 8 or slot == 9 then
+  elseif slot > 6 and slot < 10 then
     slot = slot + 2
   end
   return slot
@@ -52,8 +52,6 @@ end
 
 
 recpHistory = {}
-
-inventorySize = controller.getInventorySize(3)
 
 function craft(itemToCraft)
   table.insert(recpHistory, itemToCraft)

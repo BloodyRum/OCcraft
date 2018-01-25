@@ -1,12 +1,31 @@
 local ser = require "serialization"
 local robot = require "robot"
 local component = require "component"
+local sides = require "sides"
+
 local controller = component.inventory_controller
 local arg = { ... }
 
-f = io.open("/craft/recipies", "rb")
-recipies = assert(ser.unserialize(f:read("*a")))
-f:close()
+
+r = io.open("/craft/recipies", "rb")
+recipies = assert(ser.unserialize(r:read("*a")))
+r:close()
+
+c = io.open("/home/craftconfig", "rb")
+config = assert(ser.unserialize(c:read("*a")))
+c:close()
+
+
+side = sides[config.side] or sides.front
+function drop()
+  if side == sides.front then
+	robot.drop()
+  elseif side == sides.bottom then
+	robot.dropDown()
+  elseif side == sides.top then
+	robot.dropUp()
+  end
+end
 
 function convertSlot(slot)
   if slot > 3 and slot < 7 then
@@ -20,7 +39,7 @@ end
 function clearSlots()
   for i=1, 16 do
     robot.select(i)
-    robot.drop()
+    drop()
   end
   robot.select(1)
 end
@@ -34,13 +53,13 @@ function convertUnderscore(convertedItem)
 end
 
 function getItem(itemToGrab, slot)
-  for i=1, controller.getInventorySize(3) do
-    if controller.getStackInSlot(3, i) then
-      stackName = controller.getStackInSlot(3, i).label
+  for i=1, controller.getInventorySize(side) do
+    if controller.getStackInSlot(side, i) then
+      stackName = controller.getStackInSlot(side, i).label
       stackName = convertUnderscore(stackName)
       if itemToGrab == stackName then
         robot.select(convertSlot(slot))
-        controller.suckFromSlot(3, i, 1)
+        controller.suckFromSlot(side, i, 1)
         return
       end
     end
@@ -75,7 +94,7 @@ function craft(itemToCraft)
   robot.select(1)
   component.crafting.craft()
 
-  robot.drop()
+  drop()
   if (#recpHistory > 0) then
     table.remove(recpHistory)
     craft(table.remove(recpHistory))

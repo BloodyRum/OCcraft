@@ -25,14 +25,19 @@ function clearSlots()
   robot.select(1)
 end
 
+function convertUnderscore(convertedItem)
+  convertedItem = convertedItem:gsub(" ", "_")
+  convertedItem = convertedItem:gsub("%(", "_")
+  convertedItem = convertedItem:gsub("%)", "_")
+  convertedItem = convertedItem:gsub("%.", "_")
+  return convertedItem
+end
+
 function getItem(itemToGrab, slot)
   for i=1, controller.getInventorySize(3) do
     if controller.getStackInSlot(3, i) then
       stackName = controller.getStackInSlot(3, i).label
-      stackName = stackName:gsub(" ", "_")
-      stackName = stackName:gsub("%(", "_")
-      stackName = stackName:gsub("%)", "_")
-      stackName = stackName:gsub("%.", "_")
+      stackName = convertUnderscore(stackName)
       if itemToGrab == stackName then
         robot.select(convertSlot(slot))
         controller.suckFromSlot(3, i, 1)
@@ -45,11 +50,6 @@ function getItem(itemToGrab, slot)
   os.exit()         --s in /craft/recipies
 end
 
-item = arg[1] --TODO, do this right before we call the main function, and
-item=item:gsub(" ", "_") -- Add the the gsubs to a function because another
-item=item:gsub("%(", "_") -- function uses these exact gsubs
-item=item:gsub("%)", "_")
-item=item:gsub("%.", "_")
 
 recpHistory = {}
 
@@ -83,5 +83,8 @@ function craft(itemToCraft)
     craft(table.remove(recpHistory))
   end
 end
+
+item=arg[1]
+item = convertUnderscore(item)
 
 craft(item)

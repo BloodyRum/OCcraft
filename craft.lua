@@ -7,7 +7,7 @@ local controller = component.inventory_controller
 local arg = { ... }
 
 
-r = io.open("/home/recipies", "rb")
+r = io.open("/home/recipes", "rb")
 recipies = assert(ser.unserialize(r:read("*a")))
 r:close()
 

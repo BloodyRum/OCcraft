@@ -1,14 +1,14 @@
-local ser = require "serialization"
-local robot = require "robot"
 local component = require "component"
+local robot = require "robot"
+local ser = require "serialization"
 local sides = require "sides"
 
-local controller = component.inventory_controller
 local arg = { ... }
+local controller = component.inventory_controller
 
 
 r = io.open("/home/recipes", "rb")
-recipies = assert(ser.unserialize(r:read("*a")))
+recipes = assert(ser.unserialize(r:read("*a")))
 r:close()
 
 c = io.open("/home/craftconfig", "rb")
@@ -66,7 +66,7 @@ function getItem(itemToGrab, slot)
   end
   print("NEED AN(OTHER): " .. itemToGrab)
   craft(itemToGrab) --TODO, check if we can actually craft that item, i,e if it
-  os.exit()         --s in /craft/recipies
+  os.exit()         --s in /craft/recipes
 end
 
 
@@ -74,8 +74,8 @@ recpHistory = {}
 
 function craft(itemToCraft)
   table.insert(recpHistory, itemToCraft)
-  if recipies[itemToCraft] then
-    recipieSize = recipies[itemToCraft].items
+  if recipes[itemToCraft] then
+    recipeSize = recipes[itemToCraft].items
   else
     if (itemToCraft == not nil) then
       print("ERROR, NO RECIPE FOR: " .. itemToCraft)
@@ -84,10 +84,10 @@ function craft(itemToCraft)
   end
 
   clearSlots()
-  for i=1, recipieSize do
-    if recipies[itemToCraft] then
-      if recipies[itemToCraft][i] then
-        getItem(recipies[itemToCraft][i], i)
+  for i=1, recipeSize do
+    if recipes[itemToCraft] then
+      if recipes[itemToCraft][i] then
+        getItem(recipes[itemToCraft][i], i)
       end
     end
   end

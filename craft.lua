@@ -37,8 +37,8 @@ function convertSlot(slot)
 end
 
 function clearSlots()
-  for i=1, 16 do
-    robot.select(i)
+  for i=1, 9 do
+    robot.select(convertSlot(i))
     drop()
   end
   robot.select(1)
@@ -77,10 +77,8 @@ function craft(itemToCraft)
   if recipes[itemToCraft] then
     recipeSize = recipes[itemToCraft].items
   else
-    if (itemToCraft == not nil) then
-      print("ERROR, NO RECIPE FOR: " .. itemToCraft)
-      os.exit()
-    end
+    print("ERROR, NO RECIPE FOR: " .. itemToCraft)
+    os.exit()
   end
 
   clearSlots()
@@ -91,10 +89,11 @@ function craft(itemToCraft)
       end
     end
   end
+  
   robot.select(1)
   component.crafting.craft()
-
   drop()
+  
   if (#recpHistory > 0) then
     table.remove(recpHistory)
     craft(table.remove(recpHistory))

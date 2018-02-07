@@ -77,8 +77,8 @@ function craft(itemToCraft)
   if recipes[itemToCraft] then
     recipeSize = recipes[itemToCraft].items
   else
-    print("ERROR, NO RECIPE FOR: " .. itemToCraft)
-    os.exit()
+	print("ERROR, NO RECIPE FOR: " .. itemToCraft)
+	os.exit()
   end
 
   clearSlots()
@@ -93,9 +93,9 @@ function craft(itemToCraft)
   robot.select(1)
   component.crafting.craft()
   drop()
-  
+
+  table.remove(recpHistory)
   if (#recpHistory > 0) then
-    table.remove(recpHistory)
     craft(table.remove(recpHistory))
   end
 end

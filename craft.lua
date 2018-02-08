@@ -19,11 +19,11 @@ c:close()
 side = sides[config.side] or sides.front
 function drop()
   if side == sides.front then
-	robot.drop()
+    robot.drop()
   elseif side == sides.bottom then
-	robot.dropDown()
+    robot.dropDown()
   elseif side == sides.top then
-	robot.dropUp()
+    robot.dropUp()
   end
 end
 
@@ -69,7 +69,6 @@ function getItem(itemToGrab, slot)
   os.exit()         --s in /craft/recipes
 end
 
-
 recpHistory = {}
 
 function craft(itemToCraft)
@@ -77,8 +76,8 @@ function craft(itemToCraft)
   if recipes[itemToCraft] then
     recipeSize = recipes[itemToCraft].items
   else
-	print("ERROR, NO RECIPE FOR: " .. itemToCraft)
-	os.exit()
+    print("ERROR, NO RECIPE FOR: " .. itemToCraft)
+    os.exit()
   end
 
   clearSlots()

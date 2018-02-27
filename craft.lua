@@ -65,8 +65,8 @@ function getItem(itemToGrab, slot)
     end
   end
   print("NEED AN(OTHER): " .. itemToGrab)
-  craft(itemToGrab) --TODO, check if we can actually craft that item, i,e if it
-  os.exit()         --s in /craft/recipes
+  craft(itemToGrab)
+  os.exit()
 end
 
 recpHistory = {}

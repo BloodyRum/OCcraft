@@ -51,8 +51,7 @@ end
 function getItem(itemToGrab, slot)
   for i=1, controller.getInventorySize(side) do
     if controller.getStackInSlot(side, i) then
-      stackName = controller.getStackInSlot(side, i).label
-      stackName = convertUnderscore(stackName)
+      stackName = convertUnderscore(controller.getStackInSlot(side, i).label)
       if itemToGrab == stackName then
         robot.select(convertSlot(slot))
         controller.suckFromSlot(side, i, 1)
@@ -69,13 +68,12 @@ recpHistory = {}
 
 function craft(itemToCraft)
   table.insert(recpHistory, itemToCraft)
-  if recipes[itemToCraft] then
-    recipeSize = recipes[itemToCraft].items
-  else
+  if not recipes[itemToCraft] then
     print("ERROR, NO RECIPE FOR: " .. itemToCraft)
     os.exit()
   end
-
+  recipeSize = recipes[itemToCraft].items
+  
   clearSlots()
   for i=1, recipeSize do
     if recipes[itemToCraft] then
@@ -95,7 +93,7 @@ function craft(itemToCraft)
   end
 end
 
-item=arg[1]
-item = convertUnderscore(item)
+
+item = convertUnderscore(arg[1])
 
 craft(item)

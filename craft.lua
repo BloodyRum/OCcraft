@@ -11,12 +11,8 @@ r = io.open("/home/recipes", "rb")
 recipes = assert(ser.unserialize(r:read("*a")))
 r:close()
 
-c = io.open("/home/craftconfig", "rb")
-config = assert(ser.unserialize(c:read("*a")))
-c:close()
 
-
-side = sides[config.side] or sides.front
+side = sides[recipes.side] or sides.front
 function drop()
   if side == sides.front then
     robot.drop()

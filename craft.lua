@@ -40,18 +40,15 @@ function clearSlots()
   robot.select(1)
 end
 
-function convertUnderscore(convertedItem)
-  convertedItem = convertedItem:gsub(" ", "_")
-  convertedItem = convertedItem:gsub("%(", "_")
-  convertedItem = convertedItem:gsub("%)", "_")
-  convertedItem = convertedItem:gsub("%.", "_")
-  return convertedItem
+function replacePrs(workString)
+  workString = workString:gsub(" ", "_"):gsub("%(", "_"):gsub("%)", "_"):gsub("%.", "_")
+  return workString
 end
 
 function getItem(itemToGrab, slot)
   for i=1, controller.getInventorySize(side) do
     if controller.getStackInSlot(side, i) then
-      stackName = convertUnderscore(controller.getStackInSlot(side, i).label)
+      stackName = replacePrs(controller.getStackInSlot(side, i).label)
       if itemToGrab == stackName then
         robot.select(convertSlot(slot))
         controller.suckFromSlot(side, i, 1)
@@ -94,6 +91,6 @@ function craft(itemToCraft)
 end
 
 
-item = convertUnderscore(arg[1])
+item = replacePrs(arg[1])
 
 craft(item)

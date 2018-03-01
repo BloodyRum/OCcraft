@@ -69,14 +69,11 @@ function craft(itemToCraft)
     print("ERROR, NO RECIPE FOR: " .. itemToCraft)
     os.exit()
   end
-  recipeSize = recipes[itemToCraft].items
-  
+
   clearSlots()
-  for i=1, recipeSize do
-    if recipes[itemToCraft] then
-      if recipes[itemToCraft][i] then
-        getItem(recipes[itemToCraft][i], i)
-      end
+  for i=1, recipes[itemToCraft].items  do
+    if recipes[itemToCraft][i] then
+      getItem(recipes[itemToCraft][i], i)
     end
   end
   
@@ -91,6 +88,4 @@ function craft(itemToCraft)
 end
 
 
-item = replacePrs(arg[1])
-
-craft(item)
+craft(replacePrs(arg[1]))

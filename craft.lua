@@ -59,8 +59,10 @@ end
   
 function getItem(itemToGrab, slot)
   location = nil
-  if checkItem(itemToGrab, cache[itemToGrab]) then
-    location = cache[itemToGrab]
+  if cache[itemToGrab] then
+    if checkItem(itemToGrab, cache[itemToGrab]) then
+      location = cache[itemToGrab]
+    end
   else
     for i=1, controller.getInventorySize(side) do
       if checkItem(itemToGrab, i) == true then
@@ -70,13 +72,13 @@ function getItem(itemToGrab, slot)
     end
   end
 
-  if location then --Found the item, weather in cache or not
+  if location then
     robot.select(convertSlot(slot))
     controller.suckFromSlot(side, location, 1)
-  else -- Could not find item, must try to make it now
+  else
     print("NEED A(N(OTHER)}: " .. itemToGrab)
     craft(itemToGrab)
-    os.exit() -- <<--Will only get called after the last item is made
+    os.exit()
   end
 end
 

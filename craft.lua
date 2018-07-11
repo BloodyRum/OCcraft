@@ -11,6 +11,7 @@ r = io.open("/home/recipes", "rb")
 recipes = assert(ser.unserialize(r:read("*a")))
 r:close()
 
+cache = {}
 
 side = sides[recipes.side] or sides.front
 function drop()
@@ -45,20 +46,38 @@ function replacePrs(workString)
   return workString
 end
 
+function checkItem(item, invSlot)
+  if controller.getStackInSlot(side, invSlot) then
+    stackName = replacePrs(controller.getStackInSlot(side, invSlot).label)
+    if item == stackName then
+      return true
+    else
+      return false
+    end
+  end
+end
+  
 function getItem(itemToGrab, slot)
-  for i=1, controller.getInventorySize(side) do
-    if controller.getStackInSlot(side, i) then
-      stackName = replacePrs(controller.getStackInSlot(side, i).label)
-      if itemToGrab == stackName then
-        robot.select(convertSlot(slot))
-        controller.suckFromSlot(side, i, 1)
-        return
+  location = nil
+  if checkItem(itemToGrab, cache[itemToGrab]) then
+    location = cache[itemToGrab]
+  else
+    for i=1, controller.getInventorySize(side) do
+      if checkItem(itemToGrab, i) == true then
+        cache[itemToGrab] = i
+        location = i 
       end
     end
   end
-  print("NEED AN(OTHER): " .. itemToGrab)
-  craft(itemToGrab)
-  os.exit()
+
+  if location then --Found the item, weather in cache or not
+    robot.select(convertSlot(slot))
+    controller.suckFromSlot(side, location, 1)
+  else -- Could not find item, must try to make it now
+    print("NEED A(N(OTHER)}: " .. itemToGrab)
+    craft(itemToGrab)
+    os.exit() -- <<--Will only get called after the last item is made
+  end
 end
 
 recpHistory = {}

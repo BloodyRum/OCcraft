@@ -63,11 +63,12 @@ function getItem(itemToGrab, slot)
     if checkItem(itemToGrab, cache[itemToGrab]) then
       location = cache[itemToGrab]
     end
-  else
+  end
+  if location == nil then
     for i=1, controller.getInventorySize(side) do
       if checkItem(itemToGrab, i) == true then
         cache[itemToGrab] = i
-        location = i 
+        location = i
       end
     end
   end

@@ -11,9 +11,14 @@ r = io.open("/home/recipes", "rb")
 recipes = assert(ser.unserialize(r:read("*a")))
 r:close()
 
+recpHistory = {}
 cache = {}
 
 side = sides[recipes.side] or sides.front
+if side != sides.front or sides.bottom or sides.top then
+  print("Robots can only access the top, bottom, and front inventories")
+  os.exit()
+end
 function drop()
   if side == sides.front then
     robot.drop()
@@ -35,8 +40,10 @@ end
 
 function clearSlots()
   for i=1, 9 do
-    robot.select(convertSlot(i))
-    drop()
+    if controller.getStackInInternalSlot(convertSlot(i)) then
+      robot.select(convertSlot(i))
+      drop()
+    end
   end
   robot.select(1)
 end
@@ -82,8 +89,6 @@ function getItem(itemToGrab, slot)
     os.exit()
   end
 end
-
-recpHistory = {}
 
 function craft(itemToCraft)
   table.insert(recpHistory, itemToCraft)

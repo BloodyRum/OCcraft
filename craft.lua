@@ -15,10 +15,6 @@ recpHistory = {}
 cache = {}
 
 side = sides[recipes.side] or sides.front
-if side != sides.front or sides.bottom or sides.top then
-  print("Robots can only access the top, bottom, and front inventories")
-  os.exit()
-end
 function drop()
   if side == sides.front then
     robot.drop()

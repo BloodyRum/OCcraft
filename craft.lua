@@ -45,8 +45,7 @@ function clearSlots()
 end
 
 function replacePrs(workString)
-  workString = workString:gsub(" ", "_"):gsub("%(", "_"):gsub("%)", "_"):gsub("%.", "_")
-  return workString
+  return workString:gsub("[%(%)%. ]", "_")
 end
 
 function checkItem(item, invSlot)
